@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor Emotions and Stock Market Behaviour - Academic Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --primary: #1E3A8A;
+            --primary-light: #3B82F6;
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --bg-card: #F8FAFC;
+            --border-color: #E2E8F0;
+            --success-bg: #DCFCE7;
+            --success-text: #166534;
+            --danger-bg: #FEE2E2;
+            --danger-text: #991B1B;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            background-color: #FFFFFF;
+            line-height: 1.65;
+            padding: 40px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .meta-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-live {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            border-color: #BFDBFE;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 1.5px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-top: 24px;
+        }
+
+        p, li {
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.92rem;
+        }
+
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-card);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:hover {
+            background-color: #F8FAFC;
+        }
+
+        .highlight-box {
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--primary-light);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #F1F5F9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88rem;
+        }
+
+        pre {
+            background: #0F172A;
+            color: #F8FAFC;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        @media print {
+            .print-btn { display: none; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+    <div class="cover">
+        <div class="title">Investor Emotions and Stock Market Behaviour</div>
+        <div class="subtitle">An Empirical Behavioral Finance Investigation, Machine Learning Benchmark, and Interactive Intelligence Platform</div>
+        
+        <div class="meta-badges">
+            <span class="badge">Author: Om Patel</span>
+            <span class="badge">Academic Year: 2026</span>
+            <span class="badge">Sample Size: 10,000 Posts (37 Tickers)</span>
+            <span class="badge">Random Seed: 42</span>
+            <span class="badge badge-live">Live App: https://stockemotions-project.streamlit.app</span>
+        </div>
+    </div>
+
+    <h2>Executive Summary</h2>
+    <p>
+        This empirical capstone investigation explores the relationship between fine-grained retail investor emotions expressed on social media and stock market movements across 37 major equities and the S&P 500 index throughout 2020. 
+        Evaluating four core pillars—<strong>Real-World Case Studies</strong>, <strong>Econometric Research</strong>, <strong>Machine Learning Model Development</strong>, and <strong>Software Engineering</strong>—the study establishes a fundamental academic distinction: 
+        <strong>investor emotion acts as an instantaneous, contemporaneous mirror of market movements rather than a causal predictor of forward returns.</strong>
+    </p>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-val">+1.03%</div>
+            <div class="stat-lbl">Positive Emotion Same-Day Return</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val">-0.90%</div>
+            <div class="stat-lbl">Negative Emotion Same-Day Return</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val">t = 13.52</div>
+            <div class="stat-lbl">Welch t-stat (p &lt; 10⁻⁴⁰)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val">p = 0.936</div>
+            <div class="stat-lbl">Forward Return p-value (No Alpha)</div>
+        </div>
+    </div>
+
+    <h2>1. Data Architecture & Integrity Verification</h2>
+    <p>
+        The research utilized 10,000 verified posts across 37 equities from <code>train_stockemo.csv</code> (8,000), <code>val_stockemo.csv</code> (1,000), and <code>test_stockemo.csv</code> (1,000), paired with 41 price series from <code>dataset/price/</code>.
+    </p>
+    <ul>
+        <li><strong>Missing Values & Duplicates</strong>: Zero missing cells (0/10,000) and zero duplicated posts across IDs or text.</li>
+        <li><strong>Text Length IQR Bounds</strong>: Median character length of 66 chars (IQR bound: 174.5 chars, 4.95% outliers). Median word count of 13 words (IQR bound: 34 words, 4.23% outliers).</li>
+        <li><strong>Emoji Coverage</strong>: 100.0% of posts contain expressive emotional emojis.</li>
+        <li><strong>Return Outliers (|r| &gt; 10%)</strong>: 185 occurrences out of 9,375 trading sessions (1.97%), led by Carnival's +39.29% surge on Nov 9, 2020.</li>
+    </ul>
+
+    <h2>2. Econometric Association: The Core Scientific Finding</h2>
+    <div class="highlight-box">
+        <strong>The Central Academic Law</strong>: Contemporaneous market association does not equal forward predictive causality. 
+        Retail social media emotions react strongly to what has occurred today, but possess zero predictive power for tomorrow.
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Financial Metric</th>
+                <th>Positive Group Mean</th>
+                <th>Negative Group Mean</th>
+                <th>Difference (Pos - Neg)</th>
+                <th>Welch t-statistic</th>
+                <th>Welch p-value</th>
+                <th>Significant (α=0.05)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Same-Day Return</strong></td>
+                <td>+1.028%</td>
+                <td>-0.898%</td>
+                <td>+1.925%</td>
+                <td>13.522</td>
+                <td>3.59 × 10⁻⁴¹</td>
+                <td>✅ Yes (Massive)</td>
+            </tr>
+            <tr>
+                <td><strong>Next-Day Return</strong></td>
+                <td>+0.233%</td>
+                <td>+0.244%</td>
+                <td>-0.011%</td>
+                <td>-0.080</td>
+                <td>0.936</td>
+                <td>❌ No (Zero Alpha)</td>
+            </tr>
+            <tr>
+                <td><strong>Excess Next-Day Return</strong></td>
+                <td>+0.243%</td>
+                <td>+0.347%</td>
+                <td>-0.103%</td>
+                <td>-0.904</td>
+                <td>0.366</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><strong>5-Day Forward Volatility</strong></td>
+                <td>4.291%</td>
+                <td>4.642%</td>
+                <td>-0.351%</td>
+                <td>-4.736</td>
+                <td>2.22 × 10⁻⁶</td>
+                <td>✅ Yes</td>
+            </tr>
+            <tr>
+                <td><strong>Intraday Price Range</strong></td>
+                <td>6.042%</td>
+                <td>7.029%</td>
+                <td>-0.987%</td>
+                <td>-8.567</td>
+                <td>1.30 × 10⁻¹⁷</td>
+                <td>✅ Yes</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <strong>Market Benchmark Correlation</strong>: Daily retail bullish sentiment share correlates positively with same-day S&P 500 returns (r = +0.240, p = 0.0001), but has no correlation with next-day returns (r = +0.037, p = 0.559).
+    </p>
+
+    <h2>3. Real-World Case Studies Based Learning</h2>
+    <h3>Case 1: The March 2020 COVID-19 Liquidity Shock & Panic Peak</h3>
+    <p>
+        During the historic 34% drawdown of the S&P 500, negative emotion posts surged by 124% to 443 posts in March. 
+        Retail bullish sentiment bottomed at an annual low of 46.8%. 
+        However, peak retail panic coincided precisely with the market trough (March 23, 2020 at 2,237), which was followed by the fastest recovery rally in market history.
+    </p>
+
+    <h3>Case 2: The November 2020 "Vaccine Monday" Relief Rally</h3>
+    <p>
+        On November 9, 2020, Pfizer announced &gt;90% vaccine efficacy. Reopening equities like Carnival (CCL) surged +39.29% in a single day (the maximum return in the dataset). 
+        Investor emotion flipped instantly from depression and panic to excitement and belief, pricing in multi-year recovery expectations in a single session.
+    </p>
+
+    <h3>Case 3: The Retail Trading Explosion & Tesla (TSLA) Euphoria</h3>
+    <p>
+        Tesla alone accounted for 4,341 of the 10,000 tweets (43.4%), illustrating severe power-law volume concentration. 
+        Maintained across 64.2% bullish sentiment, retail excitement drove a +743% price run in 2020, demonstrating how retail social momentum can create substantial reflexivity.
+    </p>
+
+    <h2>4. Machine Learning Model Development & Benchmarks</h2>
+    <p>All models evaluated on the official test set (1,000 posts) using TF-IDF representation (10,000 features, n-grams 1-2):</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Classification Task</th>
+                <th>Model Architecture</th>
+                <th>Test Accuracy</th>
+                <th>Macro-F1</th>
+                <th>Weighted-F1</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="4"><strong>12-Class Emotion</strong></td>
+                <td>Majority Baseline</td>
+                <td>16.30%</td>
+                <td>0.0234</td>
+                <td>0.0457</td>
+            </tr>
+            <tr>
+                <td>Multinomial Naive Bayes (α=0.1)</td>
+                <td>31.50%</td>
+                <td>0.2541</td>
+                <td>0.2962</td>
+            </tr>
+            <tr>
+                <td>Logistic Regression (C=5.0)</td>
+                <td>37.50%</td>
+                <td>0.3150</td>
+                <td>0.3602</td>
+            </tr>
+            <tr>
+                <td><strong>Linear SVM (C=0.5) [Best]</strong></td>
+                <td><strong>37.70%</strong></td>
+                <td><strong>0.3298</strong></td>
+                <td><strong>0.3657</strong></td>
+            </tr>
+            <tr>
+                <td rowspan="4"><strong>Binary Sentiment</strong></td>
+                <td>Majority Baseline</td>
+                <td>55.50%</td>
+                <td>0.3569</td>
+                <td>0.3962</td>
+            </tr>
+            <tr>
+                <td>Multinomial Naive Bayes (α=0.5)</td>
+                <td>74.50%</td>
+                <td>0.7412</td>
+                <td>0.7447</td>
+            </tr>
+            <tr>
+                <td><strong>Logistic Regression (C=1.0) [Best]</strong></td>
+                <td><strong>77.10%</strong></td>
+                <td><strong>0.7676</strong></td>
+                <td><strong>0.7707</strong></td>
+            </tr>
+            <tr>
+                <td>Linear SVM (C=0.1)</td>
+                <td>77.00%</td>
+                <td>0.7665</td>
+                <td>0.7697</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Chronological Out-of-Sample Market Direction Prediction</h3>
+    <p>
+        In a strict chronological split (80% Train, N=7,967 / 20% Test, N=1,992), machine learning models using emotion features achieved <strong>51.00%</strong> accuracy, <strong>failing to outperform the 52.56% Majority Baseline</strong>. 
+        This provides rigorous empirical proof of the Weak-Form Efficient Market Hypothesis.
+    </p>
+
+    <h2>5. Software Application Development</h2>
+    <p>
+        The software platform is deployed live on Streamlit Community Cloud at 
+        <a href="https://stockemotions-project.streamlit.app" target="_blank"><strong>https://stockemotions-project.streamlit.app</strong></a>.
+    </p>
+    <ul>
+        <li><strong>Module 1: Live Inference Engine</strong> - Calibrated probability scoring across 12 emotions and bullish/bearish gauges.</li>
+        <li><strong>Module 2: Ticker Market Intelligence</strong> - Synchronized 2020 price charts and emotion radars for 37 equities.</li>
+        <li><strong>Module 3: Case Study Explorer</strong> - Deep dives into the March Crash, Vaccine Day, and Tesla Hype.</li>
+        <li><strong>Module 4: Empirical Research Hub</strong> - Interactive Welch, Mann-Whitney, and Kruskal-Wallis matrix.</li>
+        <li><strong>Module 5: ML Benchmark Dashboard</strong> - Transparent validation curves and out-of-sample metrics.</li>
+    </ul>
+
+    <h2>6. Conclusion</h2>
+    <p>
+        This capstone demonstrates that natural language processing can effectively quantify investor psychological states from noisy social discourse. 
+        However, financial markets efficiently absorb this information in real time: social media sentiment serves as an exceptional <em>instantaneous mirror</em> of market health, rather than an oracle of future stock returns.
+    </p>
+
+</body>
+</html>

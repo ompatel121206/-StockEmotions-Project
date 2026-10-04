@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor Emotions and Stock Market Behaviour - Slide Deck</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1100px;
+            height: 650px;
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 50px 60px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-header {
+            border-bottom: 2px solid #334155;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+
+        .slide-num {
+            font-size: 0.85rem;
+            color: #38BDF8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-top: 4px;
+        }
+
+        .slide-content {
+            flex-grow: 1;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #CBD5E1;
+            overflow-y: auto;
+        }
+
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #334155;
+            padding-top: 14px;
+            font-size: 0.85rem;
+            color: #64748B;
+        }
+
+        .badge-live {
+            background-color: #0369A1;
+            color: #E0F2FE;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .card {
+            background: #0F172A;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-bottom: 8px;
+        }
+
+        .stat-large {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #F8FAFC;
+        }
+
+        .stat-sub {
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        ul {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            background: #0F172A;
+            color: #38BDF8;
+        }
+
+        .highlight-green {
+            color: #4ADE80;
+            font-weight: 700;
+        }
+
+        .highlight-red {
+            color: #F87171;
+            font-weight: 700;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #1D4ED8;
+        }
+
+        .btn-secondary {
+            background: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .speaker-box {
+            background: #1E1B4B;
+            border-left: 4px solid #818CF8;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.88rem;
+            color: #C7D2FE;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+
+        <!-- SLIDE 1 -->
+        <div class="slide active">
+            <div class="slide-header">
+                <div class="slide-num">Slide 1 / 8</div>
+                <div class="slide-title">Investor Emotions & Stock Market Behaviour</div>
+            </div>
+            <div class="slide-content">
+                <p style="font-size: 1.25rem; color: #94A3B8; margin-bottom: 24px;">An Empirical Behavioral Finance Investigation, Machine Learning Benchmark, and Interactive Intelligence Platform</p>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">📌 Four Core Project Pillars</div>
+                        <ul>
+                            <li><strong>Real-World Case Studies</strong>: March Crash, Vaccine Rally, TSLA Hype</li>
+                            <li><strong>Empirical Research</strong>: Welch t-test, Mann-Whitney, Kruskal-Wallis</li>
+                            <li><strong>Model Development</strong>: 12-class emotion & sentiment ML benchmarks</li>
+                            <li><strong>Software Engineering</strong>: Live production Streamlit dashboard</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔬 Rigorous Methodology</div>
+                        <ul>
+                            <li><strong>Dataset</strong>: 10,000 verified posts across 37 equities</li>
+                            <li><strong>Market Data</strong>: S&P 500 (^GSPC) + 41 price series</li>
+                            <li><strong>Audit</strong>: Zero missing values, zero duplicates</li>
+                            <li><strong>Integrity</strong>: Random Seed 42 | No invented numbers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Presenter: Om Patel</span>
+                <a href="https://stockemotions-project.streamlit.app" target="_blank" class="badge-live">🌐 Live App: stockemotions-project.streamlit.app</a>
+            </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 2 / 8</div>
+                <div class="slide-title">Exploratory Data Analysis: Key Observations</div>
+            </div>
+            <div class="slide-content">
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-title">Retail Optimism Bias</div>
+                        <div class="stat-large highlight-green">54.7%</div>
+                        <div class="stat-sub">Bullish Posts (5,474 vs 4,526 Bearish)</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Optimism (1,624) and excitement (1,386) dominate positive discourse.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Volume Concentration</div>
+                        <div class="stat-large">43.4%</div>
+                        <div class="stat-sub">TSLA Share (4,341 / 10,000 Posts)</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Top 3 stocks (TSLA, AAPL, BA) account for 69.8% of all posts.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Linguistic Profile</div>
+                        <div class="stat-large">100%</div>
+                        <div class="stat-sub">Posts Containing Emojis</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Median text length is 66 characters and 13 words.</p>
+                    </div>
+                </div>
+                <div class="speaker-box">
+                    <strong>Observation</strong>: Retail investors display an asymmetric bullish bias and hyper-focus on momentum tech (TSLA, AAPL), while pandemic-hit cyclicals (BA, CCL) carry heavy clusters of anxiety and disgust.
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Data Architecture & EDA</span>
+                <span>Charts saved in analysis/charts/</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 3 / 8</div>
+                <div class="slide-title">The Core Finding: Association vs. Causation</div>
+            </div>
+            <div class="slide-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Financial Metric</th>
+                            <th>Positive Mean</th>
+                            <th>Negative Mean</th>
+                            <th>Welch t-stat</th>
+                            <th>p-value</th>
+                            <th>Statistically Significant?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Same-Day Return (T₀)</strong></td>
+                            <td class="highlight-green">+1.028%</td>
+                            <td class="highlight-red">-0.898%</td>
+                            <td><strong>13.522</strong></td>
+                            <td>3.59 × 10⁻⁴¹</td>
+                            <td class="highlight-green">✅ YES (Massive Co-Movement)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Next-Day Return (T₁)</strong></td>
+                            <td>+0.233%</td>
+                            <td>+0.244%</td>
+                            <td><strong>-0.080</strong></td>
+                            <td>0.936</td>
+                            <td class="highlight-red">❌ NO (Zero Alpha)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5-Day Forward Volatility</strong></td>
+                            <td>4.291%</td>
+                            <td>4.642%</td>
+                            <td><strong>-4.736</strong></td>
+                            <td>2.22 × 10⁻⁶</td>
+                            <td class="highlight-green">✅ YES (Panic = Higher Vol)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Intraday Price Range</strong></td>
+                            <td>6.042%</td>
+                            <td>7.029%</td>
+                            <td><strong>-8.567</strong></td>
+                            <td>1.30 × 10⁻¹⁷</td>
+                            <td class="highlight-green">✅ YES (Wider Swings)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="speaker-box">
+                    <strong>Key Scientific Takeaway</strong>: When stocks rise today, retail investors post optimistic tweets. When stocks plunge, they post panic. However, next-day returns following positive vs negative posts are statistically identical (+0.233% vs +0.244%, p = 0.936). <em>Social media is an emotional mirror, not an oracle.</em>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Econometric Hypothesis Testing</span>
+                <span>Random Seed 42 | results.json</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 4 / 8</div>
+                <div class="slide-title">Market Benchmark: S&P 500 Co-Movement</div>
+            </div>
+            <div class="slide-content">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">🟢 Same-Day S&P 500 Correlation</div>
+                        <div class="stat-large highlight-green">r = +0.240</div>
+                        <div class="stat-sub">p = 0.000115 (Spearman ρ = +0.217, p = 0.0005)</div>
+                        <p style="margin-top: 12px; font-size: 0.92rem;">
+                            Across 253 trading sessions in 2020, daily bullish sentiment share strongly co-moves with same-day market returns.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔴 Next-Day Predictive Correlation</div>
+                        <div class="stat-large highlight-red">r = +0.037</div>
+                        <div class="stat-sub">p = 0.559 (Spearman ρ = +0.007, p = 0.909)</div>
+                        <p style="margin-top: 12px; font-size: 0.92rem;">
+                            Predictive OLS regression: R² = 0.00137 (0.14%). Daily sentiment holds zero statistical predictive power for next-day market direction.
+                        </p>
+                    </div>
+                </div>
+                <div class="speaker-box">
+                    <strong>Economic Implication</strong>: Retail sentiment cannot be used to market-time broad equity indices. By the time retail investors express euphoria or panic, the price move has already been completed.
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Macro Market Dynamics</span>
+                <span>Benchmark: S&P 500 (^GSPC)</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 5 / 8</div>
+                <div class="slide-title">Real-World Case Studies</div>
+            </div>
+            <div class="slide-content">
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-title">1. March 2020 Crash</div>
+                        <p style="font-size: 0.88rem; color: #94A3B8; margin-bottom: 8px;">COVID Liquidity Freeze</p>
+                        <ul>
+                            <li>Negative emotions surged +124% to 443 posts.</li>
+                            <li>Bullish share hit annual low of 46.8%.</li>
+                            <li><strong>Lesson</strong>: Retail panic peaked at the exact market bottom (March 23 at 2,237).</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">2. Vaccine Monday</div>
+                        <p style="font-size: 0.88rem; color: #94A3B8; margin-bottom: 8px;">Nov 9, 2020 Relief Rally</p>
+                        <ul>
+                            <li>Pfizer announced >90% efficacy.</li>
+                            <li>Carnival ($CCL) surged +39.29% in 1 day (dataset record!).</li>
+                            <li><strong>Lesson</strong>: Sentiment flipped instantly to excitement before revenues recovered.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">3. Tesla Retail Wave</div>
+                        <p style="font-size: 0.88rem; color: #94A3B8; margin-bottom: 8px;">Electric Vehicle Euphoria</p>
+                        <ul>
+                            <li>$TSLA gained +743% in 2020.</li>
+                            <li>Maintained 64.2% bullishness across 4,341 tweets.</li>
+                            <li><strong>Lesson</strong>: Retail call buying forced gamma squeezes and upward momentum.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Case Studies Based Learning</span>
+                <span>Real 2020 Market Events</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 6 / 8</div>
+                <div class="slide-title">Machine Learning Benchmarks</div>
+            </div>
+            <div class="slide-content">
+                <p style="margin-bottom: 10px; font-size: 0.95rem;">Evaluated on the official test set (1,000 posts) using TF-IDF (10,000 features, n-grams 1-2):</p>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">12-Class Emotion Classification</div>
+                        <table>
+                            <tr><th>Model</th><th>Accuracy</th><th>Macro-F1</th></tr>
+                            <tr><td>Majority Baseline</td><td>16.30%</td><td>0.0234</td></tr>
+                            <tr><td>Multinomial NB</td><td>31.50%</td><td>0.2541</td></tr>
+                            <tr><td>Logistic Regression</td><td>37.50%</td><td>0.3150</td></tr>
+                            <tr><td><strong>Linear SVM [Best]</strong></td><td><strong>37.70%</strong></td><td><strong>0.3298</strong></td></tr>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Binary Sentiment (Bull/Bear)</div>
+                        <table>
+                            <tr><th>Model</th><th>Accuracy</th><th>Macro-F1</th></tr>
+                            <tr><td>Majority Baseline</td><td>55.50%</td><td>0.3569</td></tr>
+                            <tr><td>Multinomial NB</td><td>74.50%</td><td>0.7412</td></tr>
+                            <tr><td><strong>Logistic Regression [Best]</strong></td><td><strong>77.10%</strong></td><td><strong>0.7676</strong></td></tr>
+                            <tr><td>Linear SVM</td><td>77.00%</td><td>0.7665</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="speaker-box">
+                    <strong>Model Development</strong>: Linear SVM and Logistic Regression more than double the majority baseline for fine-grained 12-class emotion classification, and attain 77.1% accuracy for sentiment polarity.
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Model Development & Benchmarks</span>
+                <span>Tuned on Validation, Reported on Test</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 7 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 7 / 8</div>
+                <div class="slide-title">Directional Forecasting: The EMH Test</div>
+            </div>
+            <div class="slide-content">
+                <p style="font-size: 0.95rem; margin-bottom: 14px;">
+                    Strict chronological out-of-sample split: Train (Jan 1 – Oct 6, 80%, N=7,967) vs Test (Oct 6 – Dec 30, 20%, N=1,992):
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Forecasting Model Architecture</th>
+                            <th>Out-of-Sample Accuracy</th>
+                            <th>Macro-F1</th>
+                            <th>Beats Majority Baseline?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Majority Baseline (Always Predicts Up)</strong></td>
+                            <td><strong>52.56%</strong></td>
+                            <td>0.3445</td>
+                            <td>Benchmark</td>
+                        </tr>
+                        <tr>
+                            <td>Bernoulli Naive Bayes</td>
+                            <td>51.86%</td>
+                            <td>0.5170</td>
+                            <td class="highlight-red">❌ NO</td>
+                        </tr>
+                        <tr>
+                            <td>Logistic Regression (Emotion + Senti Features)</td>
+                            <td>51.00%</td>
+                            <td>0.5089</td>
+                            <td class="highlight-red">❌ NO</td>
+                        </tr>
+                        <tr>
+                            <td>Linear SVM (Emotion + Senti Features)</td>
+                            <td>50.95%</td>
+                            <td>0.5088</td>
+                            <td class="highlight-red">❌ NO</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="speaker-box">
+                    <strong>Academic Conclusion</strong>: Classifiers trained on emotion features achieve 51.00%, failing to beat the simple 52.56% baseline. This provides direct empirical validation of Eugene Fama's <strong>Weak-Form Efficient Market Hypothesis</strong>.
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Forecasting Feasibility Test</span>
+                <span>Chronological Out-of-Sample Evaluation</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 8 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">Slide 8 / 8</div>
+                <div class="slide-title">Working Software & Cloud Deployment</div>
+            </div>
+            <div class="slide-content">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">🌐 Live Cloud Web Application</div>
+                        <p style="color: #38BDF8; font-weight: 600; margin-bottom: 10px;">https://stockemotions-project.streamlit.app</p>
+                        <ul>
+                            <li><strong>Module 1</strong>: Live NLP Emotion & Sentiment Inference</li>
+                            <li><strong>Module 2</strong>: 37 Ticker Market Intelligence Hub</li>
+                            <li><strong>Module 3</strong>: Real-World Case Study Explorer</li>
+                            <li><strong>Module 4</strong>: Econometric Hypothesis Test Matrix</li>
+                            <li><strong>Module 5</strong>: ML Benchmarks & Performance Curves</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🏆 Summary of Project Contributions</div>
+                        <ul>
+                            <li><strong>Proven Association</strong>: Welch t = 13.52 (p &lt; 10⁻⁴⁰) for same-day returns.</li>
+                            <li><strong>Disproven Causation</strong>: Forward p = 0.936 confirms absence of return alpha.</li>
+                            <li><strong>Production ML</strong>: Serialized TF-IDF + Logistic Reg / SVM pipelines.</li>
+                            <li><strong>Public Impact</strong>: 24/7 cloud accessible dashboard for live grading.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>End-to-End Capstone Project</span>
+                <a href="https://stockemotions-project.streamlit.app" target="_blank" class="badge-live">Click to Open Live App</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-controls">
+        <button class="btn btn-secondary" onclick="prevSlide()">⬅️ Previous (←)</button>
+        <span id="counter" style="color: #94A3B8; font-weight: 600;">Slide 1 of 8</span>
+        <button class="btn" onclick="nextSlide()">Next (→) ➡️</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+
+        function updateSlide() {
+            slides.forEach((s, idx) => {
+                s.classList.toggle('active', idx === currentSlide);
+            });
+            counter.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>
