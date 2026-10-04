@@ -1,0 +1,81 @@
+{
+  "emotion_labels": [
+    "ambiguous",
+    "amusement",
+    "anger",
+    "anxiety",
+    "belief",
+    "confusion",
+    "depression",
+    "disgust",
+    "excitement",
+    "optimism",
+    "panic",
+    "surprise"
+  ],
+  "emotion_to_id": {
+    "ambiguous": 0,
+    "amusement": 1,
+    "anger": 2,
+    "anxiety": 3,
+    "belief": 4,
+    "confusion": 5,
+    "depression": 6,
+    "disgust": 7,
+    "excitement": 8,
+    "optimism": 9,
+    "panic": 10,
+    "surprise": 11
+  },
+  "id_to_emotion": {
+    "0": "ambiguous",
+    "1": "amusement",
+    "2": "anger",
+    "3": "anxiety",
+    "4": "belief",
+    "5": "confusion",
+    "6": "depression",
+    "7": "disgust",
+    "8": "excitement",
+    "9": "optimism",
+    "10": "panic",
+    "11": "surprise"
+  },
+  "sentiment_labels": [
+    "bearish",
+    "bullish"
+  ],
+  "sentiment_to_id": {
+    "bearish": 0,
+    "bullish": 1
+  },
+  "id_to_sentiment": {
+    "0": "bearish",
+    "1": "bullish"
+  },
+  "emotion_groups": {
+    "positive": [
+      "optimism",
+      "excitement",
+      "amusement",
+      "belief"
+    ],
+    "negative": [
+      "anxiety",
+      "anger",
+      "panic",
+      "depression",
+      "disgust"
+    ],
+    "neutral": [
+      "ambiguous",
+      "confusion",
+      "surprise"
+    ]
+  },
+  "model_architecture": {
+    "feature_extractor": "TfidfVectorizer(max_features=10000, ngram_range=(1,2), sublinear_tf=True)",
+    "emotion_classifier": "LogisticRegression(C=5.0, solver='lbfgs', multi_class='auto')",
+    "sentiment_classifier": "LogisticRegression(C=1.0, solver='lbfgs')"
+  }
+}

@@ -1,0 +1,2389 @@
+{
+  "project": "Investor Emotions and Stock Market Behaviour",
+  "random_seed": 42,
+  "step1_prepare": {
+    "dataset_summary": {
+      "total_records": 10000,
+      "train_records": 8000,
+      "val_records": 1000,
+      "test_records": 1000,
+      "tickers_count": 37,
+      "start_date": "2020-01-01",
+      "end_date": "2020-12-31"
+    },
+    "missing_values": {
+      "id": 0,
+      "date": 0,
+      "ticker": 0,
+      "emo_label": 0,
+      "senti_label": 0,
+      "original": 0,
+      "processed": 0,
+      "split": 0
+    },
+    "duplicates": {
+      "id_duplicates": 0,
+      "text_original_duplicates": 0,
+      "text_processed_duplicates": 0
+    },
+    "outliers": {
+      "char_count_iqr": {
+        "q1": 47.0,
+        "q3": 98.0,
+        "iqr": 51.0,
+        "lower_bound": -29.5,
+        "upper_bound": 174.5,
+        "outlier_count": 495,
+        "outlier_percentage": 4.95
+      },
+      "word_count_iqr": {
+        "q1": 9.0,
+        "q3": 19.0,
+        "iqr": 10.0,
+        "lower_bound": -6.0,
+        "upper_bound": 34.0,
+        "outlier_count": 423,
+        "outlier_percentage": 4.23
+      },
+      "daily_returns_above_10pct": {
+        "total_trading_observations": 9375,
+        "outlier_count": 185,
+        "outlier_percentage": 1.97,
+        "top_positive_returns": [
+          {
+            "ticker": "CCL",
+            "date": "2020-11-09",
+            "return": 0.3929
+          },
+          {
+            "ticker": "BA",
+            "date": "2020-03-25",
+            "return": 0.2432
+          },
+          {
+            "ticker": "CVX",
+            "date": "2020-03-24",
+            "return": 0.2274
+          },
+          {
+            "ticker": "BA",
+            "date": "2020-03-24",
+            "return": 0.2089
+          },
+          {
+            "ticker": "CCL",
+            "date": "2020-04-06",
+            "return": 0.2026
+          }
+        ],
+        "top_negative_returns": [
+          {
+            "ticker": "CCL",
+            "date": "2020-04-01",
+            "return": -0.3318
+          },
+          {
+            "ticker": "CCL",
+            "date": "2020-03-12",
+            "return": -0.3117
+          },
+          {
+            "ticker": "CCL",
+            "date": "2020-03-18",
+            "return": -0.2683
+          },
+          {
+            "ticker": "LOW",
+            "date": "2020-03-16",
+            "return": -0.2477
+          },
+          {
+            "ticker": "BA",
+            "date": "2020-03-16",
+            "return": -0.2385
+          }
+        ]
+      }
+    },
+    "label_encoding": {
+      "emo_label_to_id": {
+        "ambiguous": 0,
+        "amusement": 1,
+        "anger": 2,
+        "anxiety": 3,
+        "belief": 4,
+        "confusion": 5,
+        "depression": 6,
+        "disgust": 7,
+        "excitement": 8,
+        "optimism": 9,
+        "panic": 10,
+        "surprise": 11
+      },
+      "senti_label_to_id": {
+        "bearish": 0,
+        "bullish": 1
+      },
+      "emotion_groups": {
+        "positive": [
+          "optimism",
+          "excitement",
+          "amusement",
+          "belief"
+        ],
+        "negative": [
+          "anxiety",
+          "anger",
+          "panic",
+          "depression",
+          "disgust"
+        ],
+        "neutral": [
+          "ambiguous",
+          "confusion",
+          "surprise"
+        ]
+      }
+    },
+    "feature_summary": {
+      "word_count": {
+        "mean": 15.26,
+        "std": 8.36,
+        "min": 4,
+        "max": 56,
+        "median": 13.0
+      },
+      "char_count": {
+        "mean": 79.09,
+        "std": 44.61,
+        "min": 19,
+        "max": 256,
+        "median": 66.0
+      },
+      "emoji_present_total": 10000,
+      "emoji_present_percentage": 100.0,
+      "emotion_group_counts": {
+        "positive": 4736,
+        "negative": 3540,
+        "neutral": 1724
+      },
+      "senti_counts": {
+        "bullish": 5474,
+        "bearish": 4526
+      },
+      "emotion_counts": {
+        "optimism": 1624,
+        "excitement": 1386,
+        "anxiety": 1366,
+        "disgust": 1279,
+        "belief": 908,
+        "ambiguous": 871,
+        "amusement": 818,
+        "confusion": 609,
+        "anger": 386,
+        "panic": 304,
+        "surprise": 244,
+        "depression": 205
+      }
+    }
+  },
+  "step2_eda": {
+    "charts_generated": [
+      "01_emotion_distribution.png",
+      "02_bullish_vs_bearish.png",
+      "03_emotion_x_sentiment.png",
+      "04_posts_per_ticker.png",
+      "05_emotion_by_ticker_top10.png",
+      "06_monthly_emotion_trend_with_sp500.png",
+      "07_text_length_distribution.png",
+      "08_emotion_group_distribution.png",
+      "09_monthly_bullish_share_vs_sp500.png"
+    ],
+    "observations": {
+      "01_emotion_distribution": "Optimism is the dominant emotion with 1624 posts (16.2%), followed by excitement (1386) and anxiety (1366), whereas depression (205) and surprise (244) represent the rarest classes.",
+      "02_bullish_vs_bearish": "Investor sentiment leans distinctly bullish with 5,474 posts (54.7%) compared to 4,526 bearish posts (45.3%), reflecting retail equity bias.",
+      "03_emotion_x_sentiment": "Optimism and excitement are over 98% bullish, whereas disgust (94.9%), anxiety (89.5%), panic (97.7%), and depression (98.5%) align almost strictly with bearish sentiment; neutral categories (ambiguous, surprise) exhibit mixed polarity.",
+      "04_posts_per_ticker": "Retail tweet volume exhibits severe concentration: TSLA alone accounts for 4341 posts (43.4%), and the top 3 tickers (TSLA, AAPL, BA) comprise 69.8% of all posts.",
+      "05_emotion_by_ticker_top10": "Growth and tech leaders (TSLA, AAPL, AMZN) show strong positive emotion majorities (over 40-50%), whereas pandemic-disrupted aerospace and cruise operators (BA: 42.9% negative; CCL: 45.1% negative) exhibit substantial negative sentiment spikes.",
+      "06_monthly_emotion_trend_with_sp500": "Negative emotions surged in March 2020 (443 posts) matching the S&P 500 COVID-19 market drawdown to 2,584, followed by positive emotions rebounding strongly as equity markets climbed to record highs through Q3 and Q4 2020.",
+      "07_text_length_distribution": "Tweet lengths follow a right-skewed distribution with a median of 66 characters and 13 words; values exceeding 174.5 characters (4.95%) or 34 words (4.23%) qualify as statistical outliers by IQR.",
+      "08_emotion_group_distribution": "Positive emotions represent the largest group (4,736 posts, 47.4%), followed by negative emotions (3,540 posts, 35.4%) and neutral emotions (1,724 posts, 17.2%).",
+      "09_monthly_bullish_share_vs_sp500": "Retail bullish sentiment fell to a 2020 low in March (46.8% bullish) as equity indices collapsed, subsequently rising past 60% in autumn alongside the broader market recovery."
+    }
+  },
+  "step3_finance": {
+    "mapping_summary": {
+      "total_posts_mapped": 10000,
+      "valid_next_day_returns": 9959,
+      "valid_excess_returns": 9959,
+      "valid_fwd_vol_5d": 9924
+    },
+    "emotion_confidence_intervals": {
+      "ambiguous": {
+        "same_day_return": {
+          "n": 871,
+          "mean": -0.003225,
+          "std": 0.070597,
+          "ci_lower": -0.00792,
+          "ci_upper": 0.00147
+        },
+        "next_day_return": {
+          "n": 867,
+          "mean": -0.001564,
+          "std": 0.067198,
+          "ci_lower": -0.006044,
+          "ci_upper": 0.002915
+        },
+        "excess_next_day_return": {
+          "n": 867,
+          "mean": 0.000147,
+          "std": 0.053098,
+          "ci_lower": -0.003392,
+          "ci_upper": 0.003686
+        },
+        "fwd_vol_5d": {
+          "n": 867,
+          "mean": 0.050433,
+          "std": 0.036684,
+          "ci_lower": 0.047988,
+          "ci_upper": 0.052878
+        },
+        "intraday_range": {
+          "n": 871,
+          "mean": 0.072444,
+          "std": 0.057144,
+          "ci_lower": 0.068644,
+          "ci_upper": 0.076244
+        }
+      },
+      "amusement": {
+        "same_day_return": {
+          "n": 817,
+          "mean": 0.009766,
+          "std": 0.071912,
+          "ci_lower": 0.004827,
+          "ci_upper": 0.014704
+        },
+        "next_day_return": {
+          "n": 812,
+          "mean": 0.002869,
+          "std": 0.064805,
+          "ci_lower": -0.001595,
+          "ci_upper": 0.007333
+        },
+        "excess_next_day_return": {
+          "n": 812,
+          "mean": 0.002941,
+          "std": 0.056407,
+          "ci_lower": -0.000944,
+          "ci_upper": 0.006827
+        },
+        "fwd_vol_5d": {
+          "n": 811,
+          "mean": 0.047177,
+          "std": 0.033868,
+          "ci_lower": 0.044842,
+          "ci_upper": 0.049511
+        },
+        "intraday_range": {
+          "n": 818,
+          "mean": 0.066617,
+          "std": 0.05126,
+          "ci_lower": 0.063099,
+          "ci_upper": 0.070135
+        }
+      },
+      "anger": {
+        "same_day_return": {
+          "n": 386,
+          "mean": -0.018975,
+          "std": 0.068342,
+          "ci_lower": -0.025814,
+          "ci_upper": -0.012136
+        },
+        "next_day_return": {
+          "n": 386,
+          "mean": -0.003095,
+          "std": 0.074902,
+          "ci_lower": -0.01059,
+          "ci_upper": 0.004401
+        },
+        "excess_next_day_return": {
+          "n": 386,
+          "mean": 0.002555,
+          "std": 0.061123,
+          "ci_lower": -0.003562,
+          "ci_upper": 0.008671
+        },
+        "fwd_vol_5d": {
+          "n": 384,
+          "mean": 0.052445,
+          "std": 0.039203,
+          "ci_lower": 0.048511,
+          "ci_upper": 0.056378
+        },
+        "intraday_range": {
+          "n": 386,
+          "mean": 0.081335,
+          "std": 0.066456,
+          "ci_lower": 0.074685,
+          "ci_upper": 0.087986
+        }
+      },
+      "anxiety": {
+        "same_day_return": {
+          "n": 1360,
+          "mean": -0.0052,
+          "std": 0.058211,
+          "ci_lower": -0.008297,
+          "ci_upper": -0.002104
+        },
+        "next_day_return": {
+          "n": 1362,
+          "mean": 0.004876,
+          "std": 0.052871,
+          "ci_lower": 0.002066,
+          "ci_upper": 0.007687
+        },
+        "excess_next_day_return": {
+          "n": 1362,
+          "mean": 0.00525,
+          "std": 0.042815,
+          "ci_lower": 0.002974,
+          "ci_upper": 0.007526
+        },
+        "fwd_vol_5d": {
+          "n": 1357,
+          "mean": 0.04142,
+          "std": 0.030359,
+          "ci_lower": 0.039804,
+          "ci_upper": 0.043037
+        },
+        "intraday_range": {
+          "n": 1366,
+          "mean": 0.060484,
+          "std": 0.048088,
+          "ci_lower": 0.057932,
+          "ci_upper": 0.063037
+        }
+      },
+      "belief": {
+        "same_day_return": {
+          "n": 904,
+          "mean": 0.008343,
+          "std": 0.05368,
+          "ci_lower": 0.004839,
+          "ci_upper": 0.011847
+        },
+        "next_day_return": {
+          "n": 905,
+          "mean": 0.002784,
+          "std": 0.04776,
+          "ci_lower": -0.000332,
+          "ci_upper": 0.0059
+        },
+        "excess_next_day_return": {
+          "n": 905,
+          "mean": 0.003577,
+          "std": 0.04177,
+          "ci_lower": 0.000852,
+          "ci_upper": 0.006302
+        },
+        "fwd_vol_5d": {
+          "n": 902,
+          "mean": 0.036581,
+          "std": 0.026301,
+          "ci_lower": 0.034862,
+          "ci_upper": 0.0383
+        },
+        "intraday_range": {
+          "n": 908,
+          "mean": 0.054029,
+          "std": 0.041529,
+          "ci_lower": 0.051324,
+          "ci_upper": 0.056733
+        }
+      },
+      "confusion": {
+        "same_day_return": {
+          "n": 608,
+          "mean": -0.000828,
+          "std": 0.056131,
+          "ci_lower": -0.005298,
+          "ci_upper": 0.003643
+        },
+        "next_day_return": {
+          "n": 607,
+          "mean": 3.5e-05,
+          "std": 0.058232,
+          "ci_lower": -0.004606,
+          "ci_upper": 0.004677
+        },
+        "excess_next_day_return": {
+          "n": 607,
+          "mean": 0.00205,
+          "std": 0.048062,
+          "ci_lower": -0.001781,
+          "ci_upper": 0.005881
+        },
+        "fwd_vol_5d": {
+          "n": 605,
+          "mean": 0.043672,
+          "std": 0.033486,
+          "ci_lower": 0.040998,
+          "ci_upper": 0.046345
+        },
+        "intraday_range": {
+          "n": 609,
+          "mean": 0.060593,
+          "std": 0.047671,
+          "ci_lower": 0.0568,
+          "ci_upper": 0.064387
+        }
+      },
+      "depression": {
+        "same_day_return": {
+          "n": 205,
+          "mean": -0.008684,
+          "std": 0.068478,
+          "ci_lower": -0.018114,
+          "ci_upper": 0.000745
+        },
+        "next_day_return": {
+          "n": 205,
+          "mean": 0.00103,
+          "std": 0.062096,
+          "ci_lower": -0.007521,
+          "ci_upper": 0.009581
+        },
+        "excess_next_day_return": {
+          "n": 205,
+          "mean": 0.002211,
+          "std": 0.047759,
+          "ci_lower": -0.004366,
+          "ci_upper": 0.008787
+        },
+        "fwd_vol_5d": {
+          "n": 204,
+          "mean": 0.04604,
+          "std": 0.033957,
+          "ci_lower": 0.041353,
+          "ci_upper": 0.050728
+        },
+        "intraday_range": {
+          "n": 205,
+          "mean": 0.066697,
+          "std": 0.054651,
+          "ci_lower": 0.059171,
+          "ci_upper": 0.074222
+        }
+      },
+      "disgust": {
+        "same_day_return": {
+          "n": 1279,
+          "mean": -0.009104,
+          "std": 0.068584,
+          "ci_lower": -0.012866,
+          "ci_upper": -0.005342
+        },
+        "next_day_return": {
+          "n": 1272,
+          "mean": 0.002539,
+          "std": 0.065603,
+          "ci_lower": -0.00107,
+          "ci_upper": 0.006147
+        },
+        "excess_next_day_return": {
+          "n": 1272,
+          "mean": 0.003338,
+          "std": 0.057626,
+          "ci_lower": 0.000168,
+          "ci_upper": 0.006508
+        },
+        "fwd_vol_5d": {
+          "n": 1266,
+          "mean": 0.048632,
+          "std": 0.034585,
+          "ci_lower": 0.046725,
+          "ci_upper": 0.050539
+        },
+        "intraday_range": {
+          "n": 1279,
+          "mean": 0.075645,
+          "std": 0.052981,
+          "ci_lower": 0.072738,
+          "ci_upper": 0.078551
+        }
+      },
+      "excitement": {
+        "same_day_return": {
+          "n": 1385,
+          "mean": 0.014024,
+          "std": 0.066146,
+          "ci_lower": 0.010538,
+          "ci_upper": 0.017511
+        },
+        "next_day_return": {
+          "n": 1377,
+          "mean": 9.2e-05,
+          "std": 0.060639,
+          "ci_lower": -0.003114,
+          "ci_upper": 0.003297
+        },
+        "excess_next_day_return": {
+          "n": 1377,
+          "mean": 0.001122,
+          "std": 0.053429,
+          "ci_lower": -0.001702,
+          "ci_upper": 0.003947
+        },
+        "fwd_vol_5d": {
+          "n": 1369,
+          "mean": 0.047523,
+          "std": 0.031519,
+          "ci_lower": 0.045852,
+          "ci_upper": 0.049194
+        },
+        "intraday_range": {
+          "n": 1386,
+          "mean": 0.065865,
+          "std": 0.046352,
+          "ci_lower": 0.063423,
+          "ci_upper": 0.068308
+        }
+      },
+      "optimism": {
+        "same_day_return": {
+          "n": 1623,
+          "mean": 0.008413,
+          "std": 0.056031,
+          "ci_lower": 0.005685,
+          "ci_upper": 0.011141
+        },
+        "next_day_return": {
+          "n": 1618,
+          "mean": 0.003715,
+          "std": 0.053307,
+          "ci_lower": 0.001116,
+          "ci_upper": 0.006314
+        },
+        "excess_next_day_return": {
+          "n": 1618,
+          "mean": 0.00265,
+          "std": 0.045663,
+          "ci_lower": 0.000424,
+          "ci_upper": 0.004877
+        },
+        "fwd_vol_5d": {
+          "n": 1612,
+          "mean": 0.040382,
+          "std": 0.03109,
+          "ci_lower": 0.038863,
+          "ci_upper": 0.041901
+        },
+        "intraday_range": {
+          "n": 1624,
+          "mean": 0.056235,
+          "std": 0.046393,
+          "ci_lower": 0.053977,
+          "ci_upper": 0.058493
+        }
+      },
+      "panic": {
+        "same_day_return": {
+          "n": 303,
+          "mean": -0.012847,
+          "std": 0.0776,
+          "ci_lower": -0.021619,
+          "ci_upper": -0.004074
+        },
+        "next_day_return": {
+          "n": 304,
+          "mean": -0.000923,
+          "std": 0.077341,
+          "ci_lower": -0.009652,
+          "ci_upper": 0.007806
+        },
+        "excess_next_day_return": {
+          "n": 304,
+          "mean": -0.002001,
+          "std": 0.062744,
+          "ci_lower": -0.009083,
+          "ci_upper": 0.00508
+        },
+        "fwd_vol_5d": {
+          "n": 304,
+          "mean": 0.052176,
+          "std": 0.04405,
+          "ci_lower": 0.047205,
+          "ci_upper": 0.057148
+        },
+        "intraday_range": {
+          "n": 304,
+          "mean": 0.080221,
+          "std": 0.071616,
+          "ci_lower": 0.072139,
+          "ci_upper": 0.088304
+        }
+      },
+      "surprise": {
+        "same_day_return": {
+          "n": 243,
+          "mean": 0.023029,
+          "std": 0.070146,
+          "ci_lower": 0.014165,
+          "ci_upper": 0.031893
+        },
+        "next_day_return": {
+          "n": 244,
+          "mean": 0.004275,
+          "std": 0.069126,
+          "ci_lower": -0.004442,
+          "ci_upper": 0.012991
+        },
+        "excess_next_day_return": {
+          "n": 244,
+          "mean": 0.002709,
+          "std": 0.061539,
+          "ci_lower": -0.005051,
+          "ci_upper": 0.01047
+        },
+        "fwd_vol_5d": {
+          "n": 243,
+          "mean": 0.045944,
+          "std": 0.035346,
+          "ci_lower": 0.041478,
+          "ci_upper": 0.050411
+        },
+        "intraday_range": {
+          "n": 244,
+          "mean": 0.071422,
+          "std": 0.05503,
+          "ci_lower": 0.064483,
+          "ci_upper": 0.078362
+        }
+      }
+    },
+    "group_confidence_intervals": {
+      "positive": {
+        "same_day_return": {
+          "n": 4729,
+          "mean": 0.010277,
+          "std": 0.061699,
+          "ci_lower": 0.008518,
+          "ci_upper": 0.012036
+        },
+        "next_day_return": {
+          "n": 4712,
+          "mean": 0.002331,
+          "std": 0.056677,
+          "ci_lower": 0.000713,
+          "ci_upper": 0.00395
+        },
+        "excess_next_day_return": {
+          "n": 4712,
+          "mean": 0.002432,
+          "std": 0.049324,
+          "ci_lower": 0.001023,
+          "ci_upper": 0.003841
+        },
+        "fwd_vol_5d": {
+          "n": 4694,
+          "mean": 0.042908,
+          "std": 0.031168,
+          "ci_lower": 0.042016,
+          "ci_upper": 0.0438
+        },
+        "intraday_range": {
+          "n": 4736,
+          "mean": 0.060423,
+          "std": 0.04668,
+          "ci_lower": 0.059094,
+          "ci_upper": 0.061753
+        }
+      },
+      "negative": {
+        "same_day_return": {
+          "n": 3533,
+          "mean": -0.008976,
+          "std": 0.065714,
+          "ci_lower": -0.011144,
+          "ci_upper": -0.006809
+        },
+        "next_day_return": {
+          "n": 3529,
+          "mean": 0.002439,
+          "std": 0.063123,
+          "ci_lower": 0.000356,
+          "ci_upper": 0.004522
+        },
+        "excess_next_day_return": {
+          "n": 3529,
+          "mean": 0.003465,
+          "std": 0.052775,
+          "ci_lower": 0.001723,
+          "ci_upper": 0.005206
+        },
+        "fwd_vol_5d": {
+          "n": 3515,
+          "mean": 0.046421,
+          "std": 0.034726,
+          "ci_lower": 0.045272,
+          "ci_upper": 0.047569
+        },
+        "intraday_range": {
+          "n": 3540,
+          "mean": 0.07029,
+          "std": 0.055383,
+          "ci_lower": 0.068465,
+          "ci_upper": 0.072115
+        }
+      },
+      "neutral": {
+        "same_day_return": {
+          "n": 1722,
+          "mean": 0.001326,
+          "std": 0.066342,
+          "ci_lower": -0.001809,
+          "ci_upper": 0.004462
+        },
+        "next_day_return": {
+          "n": 1718,
+          "mean": -0.00017,
+          "std": 0.064455,
+          "ci_lower": -0.00322,
+          "ci_upper": 0.00288
+        },
+        "excess_next_day_return": {
+          "n": 1718,
+          "mean": 0.001183,
+          "std": 0.052672,
+          "ci_lower": -0.001309,
+          "ci_upper": 0.003676
+        },
+        "fwd_vol_5d": {
+          "n": 1715,
+          "mean": 0.047412,
+          "std": 0.035515,
+          "ci_lower": 0.04573,
+          "ci_upper": 0.049094
+        },
+        "intraday_range": {
+          "n": 1724,
+          "mean": 0.068113,
+          "std": 0.053934,
+          "ci_lower": 0.065565,
+          "ci_upper": 0.070661
+        }
+      }
+    },
+    "welch_and_mann_whitney_tests": {
+      "same_day_return": {
+        "pos_mean": 0.010277,
+        "neg_mean": -0.008976,
+        "difference (pos - neg)": 0.019253,
+        "welch_t_stat": 13.5223,
+        "welch_p_val": 3.5873e-41,
+        "mann_whitney_u_stat": 9839196.0,
+        "mann_whitney_p_val": 1.2914e-43,
+        "is_significant_05": true
+      },
+      "next_day_return": {
+        "pos_mean": 0.002331,
+        "neg_mean": 0.002439,
+        "difference (pos - neg)": -0.000107,
+        "welch_t_stat": -0.0799,
+        "welch_p_val": 0.93635,
+        "mann_whitney_u_stat": 7996555.0,
+        "mann_whitney_p_val": 0.0029448,
+        "is_significant_05": false
+      },
+      "excess_next_day_return": {
+        "pos_mean": 0.002432,
+        "neg_mean": 0.003465,
+        "difference (pos - neg)": -0.001033,
+        "welch_t_stat": -0.9038,
+        "welch_p_val": 0.36612,
+        "mann_whitney_u_stat": 7986632.0,
+        "mann_whitney_p_val": 0.0021673,
+        "is_significant_05": false
+      },
+      "fwd_vol_5d": {
+        "pos_mean": 0.042908,
+        "neg_mean": 0.046421,
+        "difference (pos - neg)": -0.003512,
+        "welch_t_stat": -4.7359,
+        "welch_p_val": 2.2228e-06,
+        "mann_whitney_u_stat": 7839848.5,
+        "mann_whitney_p_val": 0.0001145,
+        "is_significant_05": true
+      },
+      "intraday_range": {
+        "pos_mean": 0.060423,
+        "neg_mean": 0.07029,
+        "difference (pos - neg)": -0.009867,
+        "welch_t_stat": -8.5665,
+        "welch_p_val": 1.303e-17,
+        "mann_whitney_u_stat": 7500144.5,
+        "mann_whitney_p_val": 2.2621e-16,
+        "is_significant_05": true
+      }
+    },
+    "kruskal_wallis_tests": {
+      "same_day_return": {
+        "h_statistic": 244.4076,
+        "p_value": 4.1376e-46,
+        "is_significant_05": true
+      },
+      "next_day_return": {
+        "h_statistic": 15.0729,
+        "p_value": 0.17918,
+        "is_significant_05": false
+      },
+      "excess_next_day_return": {
+        "h_statistic": 14.5511,
+        "p_value": 0.20398,
+        "is_significant_05": false
+      },
+      "fwd_vol_5d": {
+        "h_statistic": 197.75,
+        "p_value": 2.1787e-36,
+        "is_significant_05": true
+      },
+      "intraday_range": {
+        "h_statistic": 285.7177,
+        "p_value": 8.8964e-55,
+        "is_significant_05": true
+      }
+    },
+    "sentiment_correlations": {
+      "same_day_return": {
+        "n_obs": 9984,
+        "pearson_r": 0.32541,
+        "pearson_p_val": 6.09e-245,
+        "spearman_rho": 0.35282,
+        "spearman_p_val": 1.5589e-290
+      },
+      "next_day_return": {
+        "n_obs": 9959,
+        "pearson_r": 0.0033,
+        "pearson_p_val": 0.74161,
+        "spearman_rho": -0.05174,
+        "spearman_p_val": 2.3892e-07
+      },
+      "excess_next_day_return": {
+        "n_obs": 9959,
+        "pearson_r": -0.02345,
+        "pearson_p_val": 0.019265,
+        "spearman_rho": -0.07257,
+        "spearman_p_val": 4.1302e-13
+      },
+      "fwd_vol_5d": {
+        "n_obs": 9924,
+        "pearson_r": -0.10971,
+        "pearson_p_val": 5.9084e-28,
+        "spearman_rho": -0.08714,
+        "spearman_p_val": 3.4345e-18
+      },
+      "intraday_range": {
+        "n_obs": 10000,
+        "pearson_r": -0.1718,
+        "pearson_p_val": 4.1797e-67,
+        "spearman_rho": -0.16323,
+        "spearman_p_val": 1.1346e-60
+      }
+    },
+    "daily_bullish_share_vs_sp500": {
+      "trading_days_analyzed": 253,
+      "same_day_sp_return_correlation": {
+        "pearson_r": 0.24008,
+        "pearson_p_val": 0.00011512,
+        "spearman_rho": 0.21683,
+        "spearman_p_val": 0.0005144
+      },
+      "next_day_sp_return_correlation": {
+        "pearson_r": 0.03697,
+        "pearson_p_val": 0.55907,
+        "spearman_rho": 0.00722,
+        "spearman_p_val": 0.90926
+      },
+      "next_day_predictive_ols": {
+        "slope_beta": 0.00267,
+        "intercept_alpha": -0.00073,
+        "r_squared": 0.00137,
+        "p_value": 0.55907,
+        "std_err": 0.00457
+      }
+    }
+  },
+  "step4_model": {
+    "emotion_classification_12classes": {
+      "target_classes": [
+        "ambiguous",
+        "amusement",
+        "anger",
+        "anxiety",
+        "belief",
+        "confusion",
+        "depression",
+        "disgust",
+        "excitement",
+        "optimism",
+        "panic",
+        "surprise"
+      ],
+      "models": {
+        "majority_baseline": {
+          "accuracy": 0.163,
+          "macro_f1": 0.0234,
+          "weighted_f1": 0.0457,
+          "confusion_matrix": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              87,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              83,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              38,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              134,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              89,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              60,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              121,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              146,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              163,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              31,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              29,
+              0,
+              0
+            ]
+          ],
+          "classification_report": {
+            "ambiguous": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 87.0
+            },
+            "amusement": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 83.0
+            },
+            "anger": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 38.0
+            },
+            "anxiety": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 134.0
+            },
+            "belief": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 89.0
+            },
+            "confusion": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 60.0
+            },
+            "depression": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 19.0
+            },
+            "disgust": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 121.0
+            },
+            "excitement": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 146.0
+            },
+            "optimism": {
+              "precision": 0.163,
+              "recall": 1.0,
+              "f1-score": 0.28030954428202925,
+              "support": 163.0
+            },
+            "panic": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 31.0
+            },
+            "surprise": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 29.0
+            },
+            "accuracy": 0.163,
+            "macro avg": {
+              "precision": 0.013583333333333334,
+              "recall": 0.08333333333333333,
+              "f1-score": 0.023359128690169106,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.026569000000000002,
+              "recall": 0.163,
+              "f1-score": 0.04569045571797077,
+              "support": 1000.0
+            }
+          }
+        },
+        "naive_bayes": {
+          "accuracy": 0.315,
+          "macro_f1": 0.2541,
+          "weighted_f1": 0.2962,
+          "confusion_matrix": [
+            [
+              7,
+              10,
+              0,
+              13,
+              2,
+              0,
+              0,
+              34,
+              10,
+              11,
+              0,
+              0
+            ],
+            [
+              5,
+              19,
+              0,
+              5,
+              6,
+              0,
+              0,
+              21,
+              13,
+              14,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              6,
+              14,
+              0,
+              1,
+              1,
+              9,
+              4,
+              2,
+              0,
+              0
+            ],
+            [
+              6,
+              3,
+              2,
+              60,
+              7,
+              7,
+              0,
+              18,
+              9,
+              21,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              17,
+              11,
+              1,
+              0,
+              10,
+              21,
+              27,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              17,
+              2,
+              24,
+              0,
+              7,
+              2,
+              5,
+              0,
+              0
+            ],
+            [
+              2,
+              0,
+              0,
+              6,
+              0,
+              0,
+              1,
+              4,
+              1,
+              5,
+              0,
+              0
+            ],
+            [
+              10,
+              7,
+              0,
+              17,
+              1,
+              0,
+              1,
+              60,
+              15,
+              10,
+              0,
+              0
+            ],
+            [
+              6,
+              9,
+              0,
+              15,
+              7,
+              0,
+              0,
+              17,
+              54,
+              38,
+              0,
+              0
+            ],
+            [
+              5,
+              9,
+              0,
+              27,
+              12,
+              0,
+              0,
+              10,
+              31,
+              69,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              11,
+              1,
+              0,
+              2,
+              3,
+              2,
+              9,
+              3,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              4,
+              2,
+              2,
+              0,
+              3,
+              11,
+              4,
+              0,
+              1
+            ]
+          ],
+          "classification_report": {
+            "ambiguous": {
+              "precision": 0.15555555555555556,
+              "recall": 0.08045977011494253,
+              "f1-score": 0.10606060606060606,
+              "support": 87.0
+            },
+            "amusement": {
+              "precision": 0.3114754098360656,
+              "recall": 0.2289156626506024,
+              "f1-score": 0.2638888888888889,
+              "support": 83.0
+            },
+            "anger": {
+              "precision": 0.75,
+              "recall": 0.15789473684210525,
+              "f1-score": 0.2608695652173913,
+              "support": 38.0
+            },
+            "anxiety": {
+              "precision": 0.2912621359223301,
+              "recall": 0.44776119402985076,
+              "f1-score": 0.35294117647058826,
+              "support": 134.0
+            },
+            "belief": {
+              "precision": 0.21568627450980393,
+              "recall": 0.12359550561797752,
+              "f1-score": 0.15714285714285714,
+              "support": 89.0
+            },
+            "confusion": {
+              "precision": 0.6857142857142857,
+              "recall": 0.4,
+              "f1-score": 0.5052631578947369,
+              "support": 60.0
+            },
+            "depression": {
+              "precision": 0.2,
+              "recall": 0.05263157894736842,
+              "f1-score": 0.08333333333333333,
+              "support": 19.0
+            },
+            "disgust": {
+              "precision": 0.30612244897959184,
+              "recall": 0.49586776859504134,
+              "f1-score": 0.3785488958990536,
+              "support": 121.0
+            },
+            "excitement": {
+              "precision": 0.31213872832369943,
+              "recall": 0.3698630136986301,
+              "f1-score": 0.3385579937304075,
+              "support": 146.0
+            },
+            "optimism": {
+              "precision": 0.3209302325581395,
+              "recall": 0.4233128834355828,
+              "f1-score": 0.36507936507936506,
+              "support": 163.0
+            },
+            "panic": {
+              "precision": 0.75,
+              "recall": 0.0967741935483871,
+              "f1-score": 0.17142857142857143,
+              "support": 31.0
+            },
+            "surprise": {
+              "precision": 1.0,
+              "recall": 0.034482758620689655,
+              "f1-score": 0.06666666666666667,
+              "support": 29.0
+            },
+            "accuracy": 0.315,
+            "macro avg": {
+              "precision": 0.44157375594995596,
+              "recall": 0.24262992217509813,
+              "f1-score": 0.25414842315103886,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.3582285527063162,
+              "recall": 0.315,
+              "f1-score": 0.2962114877670826,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "alpha": 0.1,
+            "val_macro_f1": 0.2735
+          }
+        },
+        "logistic_regression": {
+          "accuracy": 0.375,
+          "macro_f1": 0.315,
+          "weighted_f1": 0.3602,
+          "confusion_matrix": [
+            [
+              15,
+              14,
+              0,
+              7,
+              4,
+              2,
+              0,
+              26,
+              5,
+              13,
+              1,
+              0
+            ],
+            [
+              5,
+              29,
+              0,
+              8,
+              4,
+              0,
+              0,
+              15,
+              10,
+              12,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              9,
+              14,
+              0,
+              1,
+              0,
+              8,
+              1,
+              3,
+              0,
+              0
+            ],
+            [
+              2,
+              2,
+              1,
+              63,
+              10,
+              10,
+              0,
+              23,
+              11,
+              10,
+              2,
+              0
+            ],
+            [
+              3,
+              5,
+              0,
+              17,
+              13,
+              0,
+              0,
+              8,
+              26,
+              16,
+              1,
+              0
+            ],
+            [
+              3,
+              1,
+              0,
+              13,
+              2,
+              32,
+              0,
+              7,
+              1,
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              5,
+              0,
+              0,
+              1,
+              2,
+              1,
+              4,
+              2,
+              0
+            ],
+            [
+              13,
+              6,
+              3,
+              13,
+              0,
+              2,
+              0,
+              62,
+              11,
+              11,
+              0,
+              0
+            ],
+            [
+              6,
+              8,
+              0,
+              15,
+              6,
+              0,
+              0,
+              16,
+              70,
+              25,
+              0,
+              0
+            ],
+            [
+              3,
+              10,
+              0,
+              24,
+              16,
+              0,
+              0,
+              11,
+              24,
+              74,
+              1,
+              0
+            ],
+            [
+              2,
+              0,
+              1,
+              6,
+              0,
+              2,
+              2,
+              3,
+              1,
+              8,
+              5,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              4,
+              2,
+              1,
+              0,
+              4,
+              10,
+              4,
+              0,
+              2
+            ]
+          ],
+          "classification_report": {
+            "ambiguous": {
+              "precision": 0.2727272727272727,
+              "recall": 0.1724137931034483,
+              "f1-score": 0.2112676056338028,
+              "support": 87.0
+            },
+            "amusement": {
+              "precision": 0.3717948717948718,
+              "recall": 0.3493975903614458,
+              "f1-score": 0.36024844720496896,
+              "support": 83.0
+            },
+            "anger": {
+              "precision": 0.5625,
+              "recall": 0.23684210526315788,
+              "f1-score": 0.3333333333333333,
+              "support": 38.0
+            },
+            "anxiety": {
+              "precision": 0.3333333333333333,
+              "recall": 0.4701492537313433,
+              "f1-score": 0.39009287925696595,
+              "support": 134.0
+            },
+            "belief": {
+              "precision": 0.22807017543859648,
+              "recall": 0.14606741573033707,
+              "f1-score": 0.1780821917808219,
+              "support": 89.0
+            },
+            "confusion": {
+              "precision": 0.64,
+              "recall": 0.5333333333333333,
+              "f1-score": 0.5818181818181818,
+              "support": 60.0
+            },
+            "depression": {
+              "precision": 0.3333333333333333,
+              "recall": 0.05263157894736842,
+              "f1-score": 0.09090909090909091,
+              "support": 19.0
+            },
+            "disgust": {
+              "precision": 0.33513513513513515,
+              "recall": 0.512396694214876,
+              "f1-score": 0.40522875816993464,
+              "support": 121.0
+            },
+            "excitement": {
+              "precision": 0.4093567251461988,
+              "recall": 0.4794520547945205,
+              "f1-score": 0.4416403785488959,
+              "support": 146.0
+            },
+            "optimism": {
+              "precision": 0.4088397790055249,
+              "recall": 0.4539877300613497,
+              "f1-score": 0.43023255813953487,
+              "support": 163.0
+            },
+            "panic": {
+              "precision": 0.4166666666666667,
+              "recall": 0.16129032258064516,
+              "f1-score": 0.23255813953488372,
+              "support": 31.0
+            },
+            "surprise": {
+              "precision": 0.6666666666666666,
+              "recall": 0.06896551724137931,
+              "f1-score": 0.125,
+              "support": 29.0
+            },
+            "accuracy": 0.375,
+            "macro avg": {
+              "precision": 0.4148686632706333,
+              "recall": 0.3030772824469337,
+              "f1-score": 0.31503429702753455,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.3848678099008791,
+              "recall": 0.375,
+              "f1-score": 0.3601800783091366,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "C": 5.0,
+            "val_macro_f1": 0.3436
+          }
+        },
+        "linear_svm": {
+          "accuracy": 0.377,
+          "macro_f1": 0.3298,
+          "weighted_f1": 0.3657,
+          "confusion_matrix": [
+            [
+              15,
+              14,
+              0,
+              9,
+              2,
+              3,
+              0,
+              27,
+              4,
+              12,
+              1,
+              0
+            ],
+            [
+              8,
+              27,
+              0,
+              4,
+              6,
+              1,
+              0,
+              18,
+              11,
+              8,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              10,
+              9,
+              1,
+              2,
+              0,
+              7,
+              4,
+              2,
+              1,
+              1
+            ],
+            [
+              5,
+              1,
+              1,
+              63,
+              12,
+              10,
+              2,
+              19,
+              9,
+              9,
+              3,
+              0
+            ],
+            [
+              3,
+              5,
+              0,
+              15,
+              14,
+              0,
+              0,
+              10,
+              28,
+              14,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              14,
+              2,
+              32,
+              0,
+              6,
+              1,
+              2,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              2,
+              4,
+              0,
+              0,
+              2,
+              2,
+              1,
+              3,
+              3,
+              0
+            ],
+            [
+              11,
+              6,
+              3,
+              12,
+              0,
+              3,
+              2,
+              62,
+              11,
+              11,
+              0,
+              0
+            ],
+            [
+              4,
+              8,
+              0,
+              16,
+              5,
+              0,
+              0,
+              18,
+              69,
+              25,
+              0,
+              1
+            ],
+            [
+              4,
+              10,
+              0,
+              26,
+              12,
+              0,
+              1,
+              12,
+              24,
+              73,
+              1,
+              0
+            ],
+            [
+              2,
+              0,
+              1,
+              5,
+              0,
+              1,
+              3,
+              2,
+              1,
+              7,
+              7,
+              2
+            ],
+            [
+              1,
+              0,
+              0,
+              5,
+              2,
+              0,
+              0,
+              6,
+              8,
+              4,
+              0,
+              3
+            ]
+          ],
+          "classification_report": {
+            "ambiguous": {
+              "precision": 0.2631578947368421,
+              "recall": 0.1724137931034483,
+              "f1-score": 0.20833333333333334,
+              "support": 87.0
+            },
+            "amusement": {
+              "precision": 0.3698630136986301,
+              "recall": 0.3253012048192771,
+              "f1-score": 0.34615384615384615,
+              "support": 83.0
+            },
+            "anger": {
+              "precision": 0.5882352941176471,
+              "recall": 0.2631578947368421,
+              "f1-score": 0.36363636363636365,
+              "support": 38.0
+            },
+            "anxiety": {
+              "precision": 0.34615384615384615,
+              "recall": 0.4701492537313433,
+              "f1-score": 0.3987341772151899,
+              "support": 134.0
+            },
+            "belief": {
+              "precision": 0.25,
+              "recall": 0.15730337078651685,
+              "f1-score": 0.19310344827586207,
+              "support": 89.0
+            },
+            "confusion": {
+              "precision": 0.6153846153846154,
+              "recall": 0.5333333333333333,
+              "f1-score": 0.5714285714285714,
+              "support": 60.0
+            },
+            "depression": {
+              "precision": 0.2,
+              "recall": 0.10526315789473684,
+              "f1-score": 0.13793103448275862,
+              "support": 19.0
+            },
+            "disgust": {
+              "precision": 0.328042328042328,
+              "recall": 0.512396694214876,
+              "f1-score": 0.4,
+              "support": 121.0
+            },
+            "excitement": {
+              "precision": 0.40350877192982454,
+              "recall": 0.4726027397260274,
+              "f1-score": 0.4353312302839117,
+              "support": 146.0
+            },
+            "optimism": {
+              "precision": 0.4294117647058823,
+              "recall": 0.44785276073619634,
+              "f1-score": 0.43843843843843844,
+              "support": 163.0
+            },
+            "panic": {
+              "precision": 0.4375,
+              "recall": 0.22580645161290322,
+              "f1-score": 0.2978723404255319,
+              "support": 31.0
+            },
+            "surprise": {
+              "precision": 0.42857142857142855,
+              "recall": 0.10344827586206896,
+              "f1-score": 0.16666666666666666,
+              "support": 29.0
+            },
+            "accuracy": 0.377,
+            "macro avg": {
+              "precision": 0.3883190797784204,
+              "recall": 0.3157524108797975,
+              "f1-score": 0.32980245419503945,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.3798945919337608,
+              "recall": 0.377,
+              "f1-score": 0.3656881426066663,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "C": 0.5,
+            "val_macro_f1": 0.3332
+          }
+        }
+      }
+    },
+    "sentiment_classification_bullish_bearish": {
+      "target_classes": [
+        "bearish",
+        "bullish"
+      ],
+      "models": {
+        "majority_baseline": {
+          "accuracy": 0.555,
+          "macro_f1": 0.3569,
+          "weighted_f1": 0.3962,
+          "confusion_matrix": [
+            [
+              0,
+              445
+            ],
+            [
+              0,
+              555
+            ]
+          ],
+          "classification_report": {
+            "bearish": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 445.0
+            },
+            "bullish": {
+              "precision": 0.555,
+              "recall": 1.0,
+              "f1-score": 0.7138263665594855,
+              "support": 555.0
+            },
+            "accuracy": 0.555,
+            "macro avg": {
+              "precision": 0.2775,
+              "recall": 0.5,
+              "f1-score": 0.35691318327974275,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.30802500000000005,
+              "recall": 0.555,
+              "f1-score": 0.3961736334405144,
+              "support": 1000.0
+            }
+          }
+        },
+        "naive_bayes": {
+          "accuracy": 0.745,
+          "macro_f1": 0.7412,
+          "weighted_f1": 0.7447,
+          "confusion_matrix": [
+            [
+              312,
+              133
+            ],
+            [
+              122,
+              433
+            ]
+          ],
+          "classification_report": {
+            "bearish": {
+              "precision": 0.7188940092165899,
+              "recall": 0.701123595505618,
+              "f1-score": 0.7098976109215017,
+              "support": 445.0
+            },
+            "bullish": {
+              "precision": 0.765017667844523,
+              "recall": 0.7801801801801802,
+              "f1-score": 0.7725245316681534,
+              "support": 555.0
+            },
+            "accuracy": 0.745,
+            "macro avg": {
+              "precision": 0.7419558385305565,
+              "recall": 0.7406518878428991,
+              "f1-score": 0.7412110712948276,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.7444926397550928,
+              "recall": 0.745,
+              "f1-score": 0.7446555519358933,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "alpha": 0.5,
+            "val_macro_f1": 0.7384
+          }
+        },
+        "logistic_regression": {
+          "accuracy": 0.771,
+          "macro_f1": 0.7676,
+          "weighted_f1": 0.7707,
+          "confusion_matrix": [
+            [
+              325,
+              120
+            ],
+            [
+              109,
+              446
+            ]
+          ],
+          "classification_report": {
+            "bearish": {
+              "precision": 0.7488479262672811,
+              "recall": 0.7303370786516854,
+              "f1-score": 0.7394766780432309,
+              "support": 445.0
+            },
+            "bullish": {
+              "precision": 0.7879858657243817,
+              "recall": 0.8036036036036036,
+              "f1-score": 0.7957181088314005,
+              "support": 555.0
+            },
+            "accuracy": 0.771,
+            "macro avg": {
+              "precision": 0.7684168959958314,
+              "recall": 0.7669703411276445,
+              "f1-score": 0.7675973934373157,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.7705694826659719,
+              "recall": 0.771,
+              "f1-score": 0.770690672130665,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "C": 1.0,
+            "val_macro_f1": 0.7465
+          }
+        },
+        "linear_svm": {
+          "accuracy": 0.77,
+          "macro_f1": 0.7665,
+          "weighted_f1": 0.7697,
+          "confusion_matrix": [
+            [
+              324,
+              121
+            ],
+            [
+              109,
+              446
+            ]
+          ],
+          "classification_report": {
+            "bearish": {
+              "precision": 0.7482678983833718,
+              "recall": 0.7280898876404495,
+              "f1-score": 0.7380410022779044,
+              "support": 445.0
+            },
+            "bullish": {
+              "precision": 0.7865961199294532,
+              "recall": 0.8036036036036036,
+              "f1-score": 0.7950089126559715,
+              "support": 555.0
+            },
+            "accuracy": 0.77,
+            "macro avg": {
+              "precision": 0.7674320091564125,
+              "recall": 0.7658467456220266,
+              "f1-score": 0.7665249574669379,
+              "support": 1000.0
+            },
+            "weighted avg": {
+              "precision": 0.7695400613414469,
+              "recall": 0.77,
+              "f1-score": 0.7696581925377316,
+              "support": 1000.0
+            }
+          },
+          "tuned_hyperparameters": {
+            "C": 0.1,
+            "val_macro_f1": 0.7437
+          }
+        }
+      }
+    },
+    "next_day_direction_prediction": {
+      "chronological_split_summary": {
+        "total_observations": 9959,
+        "train_size": 7967,
+        "test_size": 1992,
+        "train_date_range": "2020-01-01 to 2020-10-06",
+        "test_date_range": "2020-10-06 to 2020-12-30",
+        "train_up_proportion": 0.5131,
+        "test_up_proportion": 0.5256
+      },
+      "feature_coefficients_logistic": {
+        "senti_encoded": -0.2427,
+        "emoji_present": 0.0722,
+        "emo_label_amusement": 0.0738,
+        "emo_label_anger": 0.0505,
+        "emo_label_anxiety": 0.1277,
+        "emo_label_belief": 0.0345,
+        "emo_label_confusion": 0.094,
+        "emo_label_depression": -0.1493,
+        "emo_label_disgust": 0.0813,
+        "emo_label_excitement": -0.0956,
+        "emo_label_optimism": 0.0018,
+        "emo_label_panic": -0.0306,
+        "emo_label_surprise": 0.0535,
+        "emotion_group_neutral": -0.0217,
+        "emotion_group_positive": 0.0144
+      },
+      "models": {
+        "majority_baseline": {
+          "accuracy": 0.5256,
+          "macro_f1": 0.3445,
+          "weighted_f1": 0.3622,
+          "confusion_matrix": [
+            [
+              0,
+              945
+            ],
+            [
+              0,
+              1047
+            ]
+          ],
+          "classification_report": {
+            "Down": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 945.0
+            },
+            "Up": {
+              "precision": 0.5256024096385542,
+              "recall": 1.0,
+              "f1-score": 0.6890424481737414,
+              "support": 1047.0
+            },
+            "accuracy": 0.5256024096385542,
+            "macro avg": {
+              "precision": 0.2628012048192771,
+              "recall": 0.5,
+              "f1-score": 0.3445212240868707,
+              "support": 1992.0
+            },
+            "weighted avg": {
+              "precision": 0.27625789301785453,
+              "recall": 0.5256024096385542,
+              "f1-score": 0.3621623711033671,
+              "support": 1992.0
+            }
+          }
+        },
+        "logistic_regression": {
+          "accuracy": 0.51,
+          "macro_f1": 0.5089,
+          "weighted_f1": 0.5078,
+          "confusion_matrix": [
+            [
+              555,
+              390
+            ],
+            [
+              586,
+              461
+            ]
+          ],
+          "classification_report": {
+            "Down": {
+              "precision": 0.4864154250657318,
+              "recall": 0.5873015873015873,
+              "f1-score": 0.5321188878235859,
+              "support": 945.0
+            },
+            "Up": {
+              "precision": 0.5417156286721504,
+              "recall": 0.44030563514804205,
+              "f1-score": 0.4857744994731296,
+              "support": 1047.0
+            },
+            "accuracy": 0.5100401606425703,
+            "macro avg": {
+              "precision": 0.5140655268689411,
+              "recall": 0.5138036112248147,
+              "f1-score": 0.5089466936483578,
+              "support": 1992.0
+            },
+            "weighted avg": {
+              "precision": 0.5154813453347681,
+              "recall": 0.5100401606425703,
+              "f1-score": 0.5077601656333611,
+              "support": 1992.0
+            }
+          }
+        },
+        "naive_bayes": {
+          "accuracy": 0.5186,
+          "macro_f1": 0.517,
+          "weighted_f1": 0.5184,
+          "confusion_matrix": [
+            [
+              460,
+              485
+            ],
+            [
+              474,
+              573
+            ]
+          ],
+          "classification_report": {
+            "Down": {
+              "precision": 0.4925053533190578,
+              "recall": 0.48677248677248675,
+              "f1-score": 0.48962213943587013,
+              "support": 945.0
+            },
+            "Up": {
+              "precision": 0.5415879017013232,
+              "recall": 0.5472779369627507,
+              "f1-score": 0.5444180522565321,
+              "support": 1047.0
+            },
+            "accuracy": 0.518574297188755,
+            "macro avg": {
+              "precision": 0.5170466275101905,
+              "recall": 0.5170252118676187,
+              "f1-score": 0.5170200958462011,
+              "support": 1992.0
+            },
+            "weighted avg": {
+              "precision": 0.5183032590199774,
+              "recall": 0.518574297188755,
+              "f1-score": 0.5184230032527543,
+              "support": 1992.0
+            }
+          }
+        },
+        "linear_svm": {
+          "accuracy": 0.5095,
+          "macro_f1": 0.5088,
+          "weighted_f1": 0.5079,
+          "confusion_matrix": [
+            [
+              545,
+              400
+            ],
+            [
+              577,
+              470
+            ]
+          ],
+          "classification_report": {
+            "Down": {
+              "precision": 0.4857397504456328,
+              "recall": 0.5767195767195767,
+              "f1-score": 0.5273343009192066,
+              "support": 945.0
+            },
+            "Up": {
+              "precision": 0.5402298850574713,
+              "recall": 0.448901623686724,
+              "f1-score": 0.4903495044340115,
+              "support": 1047.0
+            },
+            "accuracy": 0.5095381526104418,
+            "macro avg": {
+              "precision": 0.512984817751552,
+              "recall": 0.5128106002031504,
+              "f1-score": 0.5088419026766091,
+              "support": 1992.0
+            },
+            "weighted avg": {
+              "precision": 0.5143798964991444,
+              "recall": 0.5095381526104418,
+              "f1-score": 0.5078950027665966,
+              "support": 1992.0
+            }
+          }
+        }
+      },
+      "conclusion": {
+        "beats_majority_baseline": false,
+        "findings": "Emotion features do not outperform the majority baseline out-of-sample (Logistic Regression accuracy 50.85% vs. Majority Baseline 52.56%). Consistent with weak-form market efficiency, retail social sentiment reflects contemporaneous price activity but lacks predictive return forecasting power."
+      }
+    }
+  }
+}
